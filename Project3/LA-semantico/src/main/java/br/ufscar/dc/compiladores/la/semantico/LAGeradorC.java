@@ -136,7 +136,7 @@ public class LAGeradorC extends LABaseVisitor<Void>{
         // Adding scanf variables
         out.append("scanf(\"");
         for (var v : ctx.identificador()) {
-            out.append("%d ");
+            out.append("%d");
         }
         out.append("\",");
 
@@ -159,7 +159,7 @@ public class LAGeradorC extends LABaseVisitor<Void>{
         // Adding printf variables
         out.append("printf(\"");
         for (var v : ctx.expressao()) {
-            out.append("%d ");
+            out.append("%d");
         }
         out.append("\",");
 
