@@ -1,0 +1,3 @@
+[submodule "compiladores-corretor-automatico"]
+	path = compiladores-corretor-automatico
+	url = https://github.com/dlucredio/compiladores-corretor-automatico
