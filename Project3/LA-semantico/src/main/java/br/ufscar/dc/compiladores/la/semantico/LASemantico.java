@@ -16,7 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LASemantico extends LABaseVisitor<Void> {
-    SymbleTable tabela;
+    //SymbleTable tabela;
     Scopes scope;
 
     // Main visitor

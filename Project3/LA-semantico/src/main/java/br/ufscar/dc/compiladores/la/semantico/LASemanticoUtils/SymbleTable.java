@@ -277,7 +277,7 @@ public class SymbleTable {
         }
     }
 
-    // Get the type from a given symbol
+    // Get the type from a given type string
     public static TipoLA getType(String typename) {
 
         // Adding pointer support

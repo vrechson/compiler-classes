@@ -37,7 +37,7 @@ elif sys.argv[1] == "lexical-tests":
         # test cases
         str(la_path)+'/casos-de-teste',
         # RAs
-        '727349',
+        '727349, 726579',
         # opts
         'lexico'
     ]
@@ -55,7 +55,7 @@ elif sys.argv[1] == "syntactical-tests":
         # test cases
         str(la_path)+'/casos-de-teste',
         # RAs
-        '727349',
+        '727349, 726579',
         # opts
         'sintatico'
     ]
@@ -73,7 +73,7 @@ elif sys.argv[1] == "semantical-tests":
         # test cases
         str(la_path)+'/casos-de-teste',
         # RAs
-        '727349',
+        '727349, 726579',
         # opts
         'semantico'
     ]
@@ -91,7 +91,7 @@ elif sys.argv[1] == "generator-tests":
         # test cases
         str(la_path)+'/casos-de-teste',
         # RAs
-        '727349',
+        '727349, 726579',
         # opts
         'gerador'
     ]
@@ -109,7 +109,7 @@ elif sys.argv[1] == "all":
         # test cases
         str(la_path)+'/casos-de-teste',
         # RAs
-        '727349',
+        '727349, 726579',
         # opts
         'tudo'
     ]

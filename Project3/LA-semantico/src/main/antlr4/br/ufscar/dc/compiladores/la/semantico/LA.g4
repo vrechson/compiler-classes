@@ -175,7 +175,7 @@ cmdLeia                 : 'leia' '(' ('^')? identificador (',' ('^')? identifica
 
 cmdEscreva              : 'escreva' '(' expressao (',' expressao)* ')';
 
-cmdSe                   : 'se' expressao 'entao' (cmd)* ('senao' (cmd)*)? 'fim_se';
+cmdSe                   : 'se' expressao 'entao' (if_stmt+=cmd)* ('senao' (else_stmt+=cmd)*)? 'fim_se';
 
 cmdCaso                 : 'caso' exp_aritmetica 'seja' selecao ('senao' (cmd)*)? 'fim_caso';
 
