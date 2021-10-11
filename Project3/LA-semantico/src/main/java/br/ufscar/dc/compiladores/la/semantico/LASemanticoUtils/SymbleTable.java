@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * SymbleTable.java is a class where all types from the LA Language are defined.
+ * From simple types to user defined structured will be treated here.
  */
+
 package br.ufscar.dc.compiladores.la.semantico.LASemanticoUtils;
 
 import java.util.ArrayList;
@@ -39,6 +39,7 @@ public class SymbleTable {
         // List???
         boolean isType;
 
+        // Symble constructor for simple types
         public Symble(String nome, TipoLA tipo) {
             this.nome = nome;
             this.tipo = tipo;
@@ -55,6 +56,7 @@ public class SymbleTable {
 
         }
 
+        // Symble constructor for pointers
         private Symble(String nome, TipoLA tipo, TipoLA subtipo) {
             this.nome = nome;
             this.tipo = tipo;
@@ -63,6 +65,7 @@ public class SymbleTable {
             this.isType = false;
         }
 
+        // Register a new type (TODO: check if this is still necessary from the last changes)
         private Symble(String nome, TipoLA tipo, boolean isType) {
             this.nome = nome;
             this.tipo = tipo;
@@ -80,11 +83,13 @@ public class SymbleTable {
             this.variables = new ArrayList<Symble>();
         }
 
+        // Add a variable to the register
         public void addVariable(String nome, TipoLA tipo) {
             Symble var = new Symble(nome, tipo);
             this.variables.add(var);
         }
 
+        // Get variables from the register
         public ArrayList<Symble> getVariables() {
             return this.variables;
         }
@@ -92,15 +97,14 @@ public class SymbleTable {
         public boolean containsKey (String n) {
             for (var v : variables) {
                 if (n.equals(v.nome)) {
-                    System.out.println("working");
                     return true;
                 }
                     
             }
-            System.out.println("wat");
             return false;
         }
 
+        // Check the type of a register variable
         public TipoLA variableType (String n) {
             for (var v : variables)
                 if (n.equals(v.nome))
@@ -111,89 +115,94 @@ public class SymbleTable {
     }
 
     private final HashMap<String, Symble> tabela;
-    private final ArrayList<String> registers;
     private static ArrayList<String> customTypes;
     private Integer registerCounter = 0;
 
-    // Register Utils
-
     public SymbleTable() {
         tabela = new HashMap<>();
-        //registerVariables = new ArrayList<String>();
-        registers = new ArrayList<>();
         customTypes = new ArrayList<>();
     }
-    
+
+    // Register Utils
+
+    // Add a symbol to the table
     public void addSymbol(String nome, TipoLA tipo) {
         tabela.put(nome, new Symble(nome, tipo));
     }
 
+    // Add a symbol to the table
     public void addSymbol(String nome, TipoLA tipo, TipoLA subtipo) {
         tabela.put(nome, new Symble(nome, tipo, subtipo));
     }
 
+    // register a new type
     public void registerType(String nome, TipoLA tipo) {
         customTypes.add(nome);
         tabela.put(nome, new Symble(nome, tipo, true));
 
     }
 
+    // Check if a type was created by the user
     public static boolean isCustomType(String t) {
         return customTypes.contains(t);
     }
 
+    // This should create another variable from a custom type
     public void instanceType(String nome, String tipo) {
         Symble obj = tabela.get(tipo);
         tabela.put(nome, new Symble(nome, TipoLA.REGISTRO));
 
         for (var v : obj.register.getVariables()) {
-            // DEBUG
-            System.out.println("Registering: "+v.nome+" "+v.tipo);
+            // DEBUG: print when adding a variable to a register
+            //System.out.println("Registering: "+v.nome+" "+v.tipo);
             addRegisterVariable(nome, v.nome, v.tipo);
         }
-        //tabela.put(nome, new Symble(nome, tipo, true));
+        // tabela.put(nome, new Symble(nome, tipo, true));
 
     }
 
-    // I'll treat a function as an optimazed register
+    // I'll treat a function as an complex register
     public class Function {
         private ArrayList<Symble> parameters;
         private SymbleTable.TipoLA returnValue;
 
-        // This type should hold another symble...
+        // TODO: take it off
         public Function () {
             this.parameters = new ArrayList<Symble>();
             this.returnValue = null;
         }
 
+        // This should be the only cosntructor in the future
         public Function (SymbleTable.TipoLA t) {
             this.parameters = new ArrayList<Symble>();
             this.returnValue = t;
         }
 
 
-
+        // Add a parameter to a function
         public void addParameter(String nome, TipoLA tipo) {
             Symble var = new Symble(nome, tipo);
             this.parameters.add(var);
         }
 
+        // Get function parameters
         public ArrayList<Symble> getVariables() {
             return this.parameters;
         }
 
-        public boolean containsKey (String n) {
-            for (var v : parameters) {
-                if (n.equals(v.nome)) {
-                    System.out.println("working");
-                    return true;
-                }
+        // Check if it contains a parameter
+//        public boolean containsKey (String n) {
+//            for (var v : parameters) {
+//                if (n.equals(v.nome)) {
+//                    return true;
+//                }
+//
+//            }
+//            return false;
+//        }
 
-            }
-            System.out.println("wat");
-            return false;
-        }
-
+        // return the type of a function parameter
+        // TODO: still need to check if this works
         public TipoLA variableType (String n) {
             for (var v : parameters)
                 if (n.equals(v.nome))
@@ -202,12 +211,11 @@ public class SymbleTable {
         }
 
     }
-    
-    public boolean existe(String nome) {
-        // DEBUG: aaaa
-//        if (nome.contains("."))
-//            System.out.println("1: "+nome.substring(0,nome.indexOf("."))+" 2: "+nome.substring(nome.indexOf(".")+1));
 
+    // Check if a symbol exists
+    public boolean existe(String nome) {
+
+        // Check if a symbol is composed
         if (nome.contains("."))
             if (tabela.get(nome.substring(0,nome.indexOf("."))) != null)
                 return tabela.get(nome.substring(0,nome.indexOf(".")))
@@ -218,23 +226,18 @@ public class SymbleTable {
         return tabela.containsKey(nome);
     }
 
+    // verificar check a symble type
     public TipoLA verificar(String nome) {
-        //System.out.println("VERIFICAR: "+nome);
 
-        // check if it is a register
-//        if (nome.contains("."))
-//            nome = nome.substring(nome.lastIndexOf(".") + 1);
+        // Check if is a composed variable
         if (nome.contains("."))
             return tabela.get(nome.substring(0,nome.indexOf(".")))
                     .register.variableType(nome.substring(nome.indexOf(".")+1));
+
         if (tabela.get(nome) ==  null)
-            return TipoLA.LITERAL;
+            return TipoLA.INVALIDO;
         return tabela.get(nome).tipo;
     }
-
-//    public String isChildOf(String nome) {
-//        return tabela.get(nome).register;
-//    }
 
 
     // Type functions
@@ -243,24 +246,27 @@ public class SymbleTable {
     // Remember to check if this language is case sensitive
     public static boolean typeIsValid(String typename) {
 
-        //DEBUG:
-        //System.out.println(customTypes);
+        // DEBUG: check if reached here
+        // System.out.println(customTypes);
 
         if (typename.startsWith("^")) {
-            // adding pointer support
+
+            // Adding pointers support
             typename = typename.replace("^", "");
             TipoLA aux = TipoLA.valueOf(typename.toUpperCase());
             if (aux == TipoLA.INVALIDO)
                 return false;
             else
                 return true;
-            // TODO: check if this line still makes sense
+
         } else if (typename.startsWith("registro") && typename.endsWith("fim_registro")) {
+
+            // Adding support to registers
             return true;
         } else if (customTypes.contains(typename)) {
-            return true;
 
-            // adding type declaration
+            // Adding support to type declaration
+            return true;
 
         }
         try {
@@ -271,18 +277,25 @@ public class SymbleTable {
         }
     }
 
+    // Get the type from a given symbol
     public static TipoLA getType(String typename) {
-        // adding pointer support
+
+        // Adding pointer support
         if (typename.charAt(0) == '^') {
             typename = typename.replace("^", "");
             TipoLA aux = TipoLA.valueOf(typename.toUpperCase());
+
             if (aux == TipoLA.INVALIDO)
                 return TipoLA.INVALIDO;
             else
                 return TipoLA.PONTEIRO;
         } else if (typename.startsWith("registro") && typename.endsWith("fim_registro")) {
+
+            // Adding register support
             return TipoLA.REGISTRO;
-        } else if (customTypes.contains(typename)){
+        } else if (customTypes.contains(typename)) {
+
+            // Adding custom types support
             return TipoLA.REGISTRO;
         }
 //            typename = typename.replace("^", "");
@@ -303,24 +316,9 @@ public class SymbleTable {
         return TipoLA.INVALIDO;
     }
 
-    //
-//    public void RegisterListAdd (String var) {
-//        registerVariables.add(var);
-//    }
-//
-//    public boolean RegisterListCheck (String var) {
-//        if (registerVariables.contains(var)) {
-//            registerVariables.remove(var);
-//            return true;
-//        }
-//        return false;
-//    }
-
     // Register associated
-    public void addRegister (String r) {
-        registers.add(r);
-    }
 
+    // Add a variable to a register
     public void addRegisterVariable (String nr, String nv, TipoLA t) {
         Symble s;
         s = tabela.get(nr);
@@ -328,47 +326,27 @@ public class SymbleTable {
         s.register.addVariable(nv, t);
     }
 
+    // Register counter functions
 
-    public List<String> getRegisters () {
-        Symble reg;
-
-        return registers;
-    }
-
-    public void clearRegisters () {
-        registers.clear();
-    }
-
-//    public boolean isRegisterChild(String v) {
-//        // divide between father and child
-//        Matcher m = Pattern.compile("^(?:.*?\\.)?(.*?)\\.(.*?)$").matcher(v);
-////        if (m.find()) {
-////            System.out.println("FatChil: "+ m.group(2)+ " : "+m.group(1)+ " : "+this.isChildOf(m.group(1)));
-////            if (this.existe(m.group(2)) && this.isChildOf(m.group(1)) == m.group(2)) {
-////                System.out.println("FatChil: "+ m.group(2)+ " : "+m.group(1));
-////                return true;
-////            }
-////        }
-//
-//
-//        return false;
-//    }
-
-    // Register counter
+    // Increase the counter by 2
     public void increseRegisterCounter() {
         registerCounter += 2;
     }
 
+    // Decrease the counter by 1
     public void decreseRegisterCounter() {
         registerCounter -= 1;
     }
 
+    // Get counter value
     public Integer getRegisterCounter() {
         return registerCounter;
     }
 
-    // Function functions
+    // Function type functions
 
+    // Add local parameters
+    // TODO: Check if this is the best way of doing it
     public void addFunctionParameter (String nf, String np, TipoLA t) {
         Symble s;
         s = tabela.get(nf);

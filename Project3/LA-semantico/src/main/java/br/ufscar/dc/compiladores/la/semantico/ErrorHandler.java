@@ -1,6 +1,6 @@
 /*
- * ErrorHandler Class
- * This class will allow us to choose our custom error messages
+ * ErrorHandler.java is a class where some ANTLR default errors are overwritten.
+ * Instead of them, I defined my set of error messages
  */
 
 

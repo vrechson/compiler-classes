@@ -1,3 +1,9 @@
+/*
+ * LAGeradorC.java is a class where C equivalent code is generated from this parser.
+ * The main purpose to build executable codes from LA algorithms.
+ *
+ */
+
 package br.ufscar.dc.compiladores.la.semantico;
 
 import br.ufscar.dc.compiladores.la.semantico.LASemanticoUtils.Scopes;

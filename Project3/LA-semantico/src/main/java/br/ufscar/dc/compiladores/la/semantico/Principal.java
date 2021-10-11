@@ -1,3 +1,9 @@
+/*
+ * Princpal.java is the main class of the project.
+ * This class is going to parse, build ast tree and run semantical parser in the generated code.
+ *
+ */
+
 package br.ufscar.dc.compiladores.la.semantico;
 import java.io.File;
 import java.io.IOException;

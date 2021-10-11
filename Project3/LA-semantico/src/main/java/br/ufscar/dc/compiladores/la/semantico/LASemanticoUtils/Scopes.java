@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Scope.java is a class where different variables contexts are managed.
+ * Since LA Language, such as C, separe different contexts of variables,
+ * this class will mantain this structure working.
  */
 package br.ufscar.dc.compiladores.la.semantico.LASemanticoUtils;
 
@@ -18,7 +18,7 @@ public class Scopes {
         createNewScope();
     }
 
-    // Scope management
+    // Scope management functions
 
     // Create new scope
     public void createNewScope() {
@@ -30,17 +30,20 @@ public class Scopes {
         return tableStack.peek();
     }
 
-    // I don't know why this function is needed, may delete it in the future
+    // I don't know if this function is really needed, may delete it in the future
     // Maybe for debug and error reasons
     public List<SymbleTable> walkNestedContext() {
         return tableStack;
     }
 
+    // Delete a context from stack
     public void removeContext() { tableStack.pop();}
 
+    // Get in which level of stack we are currently working
+    // I have my questions if this is the better way of working with this stack context
     public int getContextLevel() { return tableStack.size();}
 
-    // Working context utils
+    // Current context utils
 
     // Check if a variable exists localy
     public boolean existsInCurrentScope(String v) {
@@ -54,71 +57,46 @@ public class Scopes {
         return curr.verificar(v);
     }
 
-
     // Add a local variable
     public void addSymbol(String n, SymbleTable.TipoLA t) {
         SymbleTable curr = this.getCurrentContext();
         curr.addSymbol(n, t);
     }
 
-    // Add a local pointer
+    // Pointer associated functions
+
+    // Add a pointer to the context
     public void addSymbol(String n, SymbleTable.TipoLA t, SymbleTable.TipoLA s) {
         SymbleTable curr = this.getCurrentContext();
         curr.addSymbol(n, t, s);
     }
 
-    // Add a new type
+    // Register associated functions
+
+    // Register a new type
     public void registerType(String n, SymbleTable.TipoLA t) {
         SymbleTable curr = this.getCurrentContext();
         curr.registerType(n, t);
     }
 
+    // Instantiate a variable from a custom type
     public void instanceType(String n, String t) {
         SymbleTable curr = this.getCurrentContext();
         curr.instanceType(n, t);
     }
 
-    // Add a local register
-    // TODO: this may change
-//    public void addSymbol(String n, SymbleTable.TipoLA t, String s) {
-//        SymbleTable curr = this.getCurrentContext();
-//        curr.addSymbol(n, t, s);
-//    }
-
-    // Register associated functions
-    // TODO: clean all this mess
-
-    // add a register
+    // Add a register variable
     public void addRegisterVariable(String nr, String nv, SymbleTable.TipoLA t) {
         SymbleTable curr = this.getCurrentContext();
         curr.addRegisterVariable(nr, nv, t);
     }
 
+    // Check if a variable exists in a register
     public boolean existsInRegisterList(String v) {
         SymbleTable curr = this.getCurrentContext();
         //return curr.RegisterListCheck(v);
         return true;
     }
-
-    public void addRegister(String r) {
-        SymbleTable curr = this.getCurrentContext();
-        curr.addRegister(r);
-    }
-
-    public List<String> getRegisters() {
-        SymbleTable curr = this.getCurrentContext();
-        return curr.getRegisters();
-    }
-
-    public void cleanRegisters() {
-        SymbleTable curr = this.getCurrentContext();
-        curr.clearRegisters();
-    }
-
-//    public boolean registerChild(String v) {
-//        SymbleTable curr = this.getCurrentContext();
-//        return curr.isRegisterChild(v);
-//    }
 
     public void increseRegisterCounter() {
         SymbleTable curr = this.getCurrentContext();

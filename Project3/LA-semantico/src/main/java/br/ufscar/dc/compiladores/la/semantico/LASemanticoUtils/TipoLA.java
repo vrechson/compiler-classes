@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * TipoLA.java is a class where a lot of types checks and types registering are made.
+ * Actually, all the program logic from LASemantico.java is treated here.
  */
+
 package br.ufscar.dc.compiladores.la.semantico.LASemanticoUtils;
 
 import br.ufscar.dc.compiladores.la.semantico.LAParser;
@@ -183,8 +183,8 @@ public class TipoLA {
 
         // TODO: check if this is necessary
         for (var cmd : ctx.cmd()) {
-            // MISSING: treat commands
-            //System.out.println("passando pelos comandos");
+            // TODO: treat commands
+            // System.out.println("passando pelos comandos");
         }
 
         return null;
@@ -196,8 +196,8 @@ public class TipoLA {
 
         // get left side type
         typeVariable = scope.getSymbolType(ctx.identificador().getText());
-        // DEBUG:
-        //System.out.println("Left: "+typeVariable);
+        // DEBUG: left side from type check
+        // System.out.println("Left: "+typeVariable);
 
         // get expression type
         typeExpression = verifyType(scope, ctx.expressao());
@@ -211,7 +211,8 @@ public class TipoLA {
 
         leftTermType = verifyType(scope, ctx.termo_logico(0));
         for (int i = 1; i < ctx.termo_logico().size(); i++) {
-           // System.out.println("termo logico:"+ctx.termo_logico(i).getText());
+            // DEBUG: logic term
+            // System.out.println("termo logico:"+ctx.termo_logico(i).getText());
             rightTermType = verifyType(scope, ctx.termo_logico(i));
 
             // Verify if it is the same type
@@ -238,14 +239,13 @@ public class TipoLA {
         if (leftTermType != SymbleTable.TipoLA.INVALIDO && ctx.fator_logico().size() > 1)
             leftTermType = SymbleTable.TipoLA.LOGICO;
 
-        //
         return leftTermType;
     }
 
     // Fator Logico verification
     public static SymbleTable.TipoLA verifyType(Scopes scope, LAParser.Fator_logicoContext ctx) {
         SymbleTable.TipoLA TypeTerm;
-        //
+
         if (ctx.parcela_logica() != null) {
             TypeTerm = verifyType(scope, ctx.parcela_logica());
             return TypeTerm;
@@ -378,7 +378,6 @@ public class TipoLA {
         } else if (ctx.CADEIA() != null) {
             typeTerm = SymbleTable.TipoLA.LITERAL;
         }
-        //
 
         return typeTerm;
     }
@@ -406,8 +405,8 @@ public class TipoLA {
     public static void verifyType(Scopes scope, LAParser.VariavelContext ctx) {
         SymbleTable.TipoLA type, subtype = null;
 
-        // DEBUG: purposes
-        //System.out.println("verifyTypeVariavel: "+ctx.tipo().getText());
+        // DEBUG: check if it reaches here
+        // System.out.println("verifyTypeVariavel: "+ctx.tipo().getText());
 
         if (ctx.tipo() == null ||
                 !SymbleTable.typeIsValid(ctx.tipo().getText())) {
@@ -456,7 +455,7 @@ public class TipoLA {
                                 scope.increseRegisterCounter();
 
                             // DEBUG: Add register variables
-                            //System.out.println("adding " + ctx.tipo().registro().variavel(j).identificador(k).getText() + " to register " + ctx.identificador(i).getText());
+                            // System.out.println("adding " + ctx.tipo().registro().variavel(j).identificador(k).getText() + " to register " + ctx.identificador(i).getText());
                             scope.addRegisterVariable(ctx.identificador(i).getText(),
                                     ctx.tipo().registro().variavel(j).identificador(k).getText(),
                                     SymbleTable.getType(ctx.tipo().registro().variavel(j).tipo().getText()));
@@ -466,8 +465,8 @@ public class TipoLA {
                 } else if (type == SymbleTable.TipoLA.REGISTRO) {
 
                     // DEBUG: copy type
-                    //System.out.println("custom copy of a register");
-                    //System.out.println("nome tipo: "+ctx.identificador(i).getText()+" "+ctx.tipo().getText());
+                    // System.out.println("custom copy of a register");
+                    // System.out.println("nome tipo: "+ctx.identificador(i).getText()+" "+ctx.tipo().getText());
                     scope.instanceType(ctx.identificador(i).getText(), ctx.tipo().getText());
 
                     continue;
@@ -478,7 +477,7 @@ public class TipoLA {
                 }
 
                 // DEBUG: If it's a simple variable, add it to the table.
-                //System.out.println("Contador: "+scope.getRegisterCounter()+" : "+ctx.identificador(i).getText());
+                // System.out.println("Contador: "+scope.getRegisterCounter()+" : "+ctx.identificador(i).getText());
 
                 // Avoid ghost variables
                 if (scope.getRegisterCounter() > 0) {
@@ -494,7 +493,6 @@ public class TipoLA {
                 // Semantic error! declaring a variable twice
                 TipoLA.adicionarErroSemantico(ctx.identificador(i).stop, "identificador " + ctx.identificador(i).stop.getText() + " ja declarado anteriormente");
             }
-
 
         }
     }
